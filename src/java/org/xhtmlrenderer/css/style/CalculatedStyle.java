@@ -611,13 +611,13 @@ public class CalculatedStyle {
             if (style._padding == null) {
                 RectPropertySet result = newRectInstance(style, shorthandProp, sides, cbWidth, ctx);
                 boolean allZeros = result.isAllZeros();
-                
+
                 if (allZeros) {
                     result = RectPropertySet.ALL_ZEROS;
                 }
-                
+
                 style._padding = result;
-                
+
                 if (! allZeros && style._padding.hasNegativeValues()) {
                     style._padding.resetNegativeValues();
                 }
@@ -647,7 +647,7 @@ public class CalculatedStyle {
             return style._margin;
         }
     }
-    
+
     private static RectPropertySet newRectInstance(CalculatedStyle style,
                                                    CSSName shorthand,
                                                    CSSName[] sides,
@@ -666,14 +666,14 @@ public class CalculatedStyle {
                                                        CssContext ctx) {
         if (style._border == null) {
             BorderPropertySet result = BorderPropertySet.newInstance(style, ctx);
-            
+
             boolean allZeros = result.isAllZeros();
             if (allZeros && ! result.hasHidden()) {
                 result = BorderPropertySet.EMPTY_BORDER;
             }
-            
+
             style._border = result;
-            
+
             if (! allZeros && style._border.hasNegativeValues()) {
                 style._border.resetNegativeValues();
             }
@@ -723,6 +723,10 @@ public class CalculatedStyle {
             _FSFontMetrics = c.getFSFontMetrics(getFSFont(c));
         }
         return _FSFontMetrics;
+    }
+
+    public IdentValue getWordWrap() {
+        return getIdent(CSSName.WORD_WRAP);
     }
 
     public boolean isClearLeft() {
@@ -880,14 +884,14 @@ public class CalculatedStyle {
 
     public boolean establishesBFC() {
         IdentValue display = getIdent(CSSName.DISPLAY);
-        
+
         FSDerivedValue value = valueByName(CSSName.POSITION);
-        
+
         if (value instanceof FunctionValue) {  // running(header)
             return false;
         } else {
             IdentValue position = (IdentValue)value;
-    
+
             return isFloated() ||
                     position == IdentValue.ABSOLUTE || position == IdentValue.FIXED ||
                     display == IdentValue.INLINE_BLOCK || display == IdentValue.TABLE_CELL ||
@@ -897,38 +901,38 @@ public class CalculatedStyle {
 
     public boolean requiresLayer() {
         FSDerivedValue value = valueByName(CSSName.POSITION);
-        
+
         if (value instanceof FunctionValue) {  // running(header)
             return false;
         } else {
             IdentValue position = getIdent(CSSName.POSITION);
-    
+
             if (position == IdentValue.ABSOLUTE ||
                     position == IdentValue.RELATIVE || position == IdentValue.FIXED) {
                 return true;
             }
-    
+
             IdentValue overflow = getIdent(CSSName.OVERFLOW);
-            if ((overflow == IdentValue.SCROLL || overflow == IdentValue.AUTO) && 
+            if ((overflow == IdentValue.SCROLL || overflow == IdentValue.AUTO) &&
                     isOverflowApplies()) {
                 return true;
             }
-    
+
             return false;
         }
     }
-    
+
     public boolean isRunning() {
         FSDerivedValue value = valueByName(CSSName.POSITION);
         return value instanceof FunctionValue;
     }
-    
+
     public String getRunningName() {
         FunctionValue value = (FunctionValue)valueByName(CSSName.POSITION);
         FSFunction function = value.getFunction();
-        
+
         PropertyValue param = (PropertyValue)function.getParameters().get(0);
-        
+
         return param.getStringValue();
     }
 
@@ -1014,7 +1018,7 @@ public class CalculatedStyle {
         return isIdent(CSSName.OVERFLOW, IdentValue.VISIBLE) &&
                 ! (isFloated() || isAbsolute() || isFixed() || isInlineBlock());
     }
-    
+
     public boolean isAbsFixedOrInlineBlockEquiv() {
         return isAbsolute() || isFixed() || isInlineBlock() || isInlineTable();
     }
@@ -1149,21 +1153,21 @@ public class CalculatedStyle {
 
         return null;
     }
-    
+
     public boolean isPaginateTable() {
         return isIdent(CSSName.FS_TABLE_PAGINATE, IdentValue.PAGINATE);
     }
-    
+
     public boolean isTextJustify() {
-        return isIdent(CSSName.TEXT_ALIGN, IdentValue.JUSTIFY) && 
+        return isIdent(CSSName.TEXT_ALIGN, IdentValue.JUSTIFY) &&
                 ! (isIdent(CSSName.WHITE_SPACE, IdentValue.PRE) ||
                         isIdent(CSSName.WHITE_SPACE, IdentValue.PRE_LINE));
     }
-    
+
     public boolean isListMarkerInside() {
         return isIdent(CSSName.LIST_STYLE_POSITION, IdentValue.INSIDE);
     }
-    
+
     public boolean isKeepWithInline() {
         return isIdent(CSSName.FS_KEEP_WITH_INLINE, IdentValue.KEEP);
     }
