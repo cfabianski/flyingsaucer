@@ -44,13 +44,13 @@ import java.util.ArrayList;
  */
 public class JDKXRLogger implements XRLogger {
     private static boolean initPending = true;
-    
+
     /** {@inheritdoc} */
     public void log(String where, Level level, String msg) {
         if (initPending) {
             init();
         }
-        
+
         getLogger(where).log(level, msg);
     }
 

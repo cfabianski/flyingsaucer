@@ -56,6 +56,7 @@ public class XRLog {
     private static XRLogger loggerImpl;
 
     private static boolean loggingEnabled = true;
+    private static String tagging = null;
 
     /**
      * Returns a list of all loggers that will be accessed by XRLog. Each entry is a String with a logger
@@ -149,7 +150,7 @@ public class XRLog {
     public static void junit(Level level, String msg, Throwable th) {
         log(JUNIT, level, msg, th);
     }
-    
+
     public static void load(String msg) {
         load(Level.INFO, msg);
     }
@@ -212,7 +213,12 @@ public class XRLog {
             init();
         }
         if (isLoggingEnabled()) {
-            loggerImpl.log(where, level, msg, th);
+            if (getTagging() != null) {
+                String taggedMessage = getTagging() + " " + msg;
+                loggerImpl.log(where, level, taggedMessage, th);
+            } else {
+                loggerImpl.log(where, level, msg, th);
+            }
         }
     }
 
@@ -248,7 +254,7 @@ public class XRLog {
             initPending = false;
 
             XRLog.setLoggingEnabled(Configuration.isTrue("xr.util-logging.loggingEnabled", true));
-            
+
             if (loggerImpl == null) {
                 loggerImpl = new JDKXRLogger();
             }
@@ -285,6 +291,14 @@ public class XRLog {
 
     public static XRLogger getLoggerImpl() {
         return loggerImpl;
+    }
+
+    public static void setTagging(String tagging) {
+        XRLog.tagging = tagging;
+    }
+
+    public static String getTagging() {
+      return tagging;
     }
 
     public static void setLoggerImpl(XRLogger loggerImpl) {
