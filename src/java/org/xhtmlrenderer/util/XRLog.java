@@ -213,12 +213,7 @@ public class XRLog {
             init();
         }
         if (isLoggingEnabled()) {
-            if (getTagging() != null) {
-                String taggedMessage = getTagging() + " " + msg;
-                loggerImpl.log(where, level, taggedMessage, th);
-            } else {
-                loggerImpl.log(where, level, msg, th);
-            }
+            loggerImpl.log(where, level, msg, th);
         }
     }
 
@@ -291,14 +286,6 @@ public class XRLog {
 
     public static XRLogger getLoggerImpl() {
         return loggerImpl;
-    }
-
-    public static void setTagging(String tagging) {
-        XRLog.tagging = tagging;
-    }
-
-    public static String getTagging() {
-      return tagging;
     }
 
     public static void setLoggerImpl(XRLogger loggerImpl) {
